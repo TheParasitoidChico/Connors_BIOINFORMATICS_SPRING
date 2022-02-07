@@ -1,0 +1,341 @@
+##########################################
+Christian Connors
+Homework week 1.
+##########################################
+# Homework 1 - Linux Refresh
+## Part I: Questions
+
+1. 	What is a Graphical User Interface (GUI) and how does that differ from the Command Line Interface (CLI)?
+answer: A Graphical User Interface is typically a "user firendly" interface which does not require the user to input "raw" commands, but offers a set of executable functions which the user can pick from. They vary in their "user friendlieness" with some being "improved" Command Line Interfaces (ie. RStudio, Visual Studios, Atom) and others being point and click programs (none come to mind, but they do exist). A Command Line Interface is more adaptable, since the user is not limited to the pre-determined set of executable functions provided in a GUI (but, of course it lacks a "graphical" aspect). 
+
+2.	What does the shell do?
+answer: Your shell is how you interact with your operating system, via taking commands (from you, the user) and then (1.) completing those tasks or (2.) passing that command on to another program, and returning the ouput.
+
+3.	What is the command used for listing things in a directory?
+answer: >$ ls
+
+4.	What is the command used for changing directories?
+answer: >$ cd
+
+5.	What command would you use to get your current working directory?
+answer: >$ pwd
+
+6.	How do you get the manual for these commands?
+answer: >$ man
+
+7.	What does the shell prompt look like?
+answer: >$
+
+8.	How would you list things in a directory in chronological order?
+answer: >$ ls -t
+
+9.	Name two ways to get to the ‘home’ or ‘root’ directory.
+answer: >$ ~
+	>$ /home/
+
+10.	What is the difference between an absolute path and a relative path?
+answer: absolute paths use the names of directories (relative to the root directory) in order to determine where you
+ "are"; they can only work along a single, specific path with directories of a certain name. A relative path uses "." and ".." as placeholders for your current directory and your parent directory, and in theory a path comprised only of these placeholders could work anywhere, since they don't pertain to any specific directory.
+
+11.	What are the two relative path directories we talked about and what do they mean?
+answer: "." current
+	".." parent
+	"~" home
+
+12.	Why shouldn’t you put spaces in filenames?
+answer: the shell will assume the space is a command, due to the built its syntax, and not recognize it as a DIR
+
+13.	Name a way to have multiple readable words in a filename without spaces?
+answer: camel-caps (CamelCaps), underscores ('_'), dashs ('-'). 
+
+14.	What is the program nano, what does it do? Do you use nano? If not what do you use?
+answer: Nano is pretty much just a text editor that you can call from the command line, and has an integrated interface with the terminal (at least in LINUX and the MacOS). I personally don't use it for most things, I prefer to use ATOM.
+
+15.	``*`` is a form of a wildcard. What does it mean?
+answer: I believe it matches any string that does not contain white spaces
+
+16.	The following code would match what? 
+		```ls *.txt``` 
+answer: anything ending with .txt and not containing white spaces. for example:
+	text.txt = match
+	reee.txt = match
+	but
+	t ext.txt = incomplete match
+	re ee.txt = incomplete match
+
+17.	Why do we need to be careful with the ```mv``` command?
+answer: you can move things somewhere where
+ (1.) you lose it
+ (2.) you can move directories by accident, making path-dependent scripts unuseable.
+
+
+18.	Why do we need to be careful with the ```rm``` command?
+answer: you can remove stuff and then it's "audios, goodbye" forever.
+
+19.	What is the difference between ```>``` and ```>>```?
+answer: '>' is used to pipe the output to somewhere besides the terminal (standard output), like a text file. For instance, if you wanted a text file containing the contents of a directory, you might use:
+	>$ ls -l > contents.txt
+what would normally show up in your terminal (ie. output of ls -l) would be redirected to your new file contents.txt.
+
+'>>' is used to append files, for example I might try 
+	>$ echo "Contents of Directory">>contents.txt
+which will add the phrase "Contents of Directory" to the end of contents.txt
+
+20.	What does ```head``` do? 
+answer: head returns the first 10 lines of a file, but the number of lines can be altered.
+
+21.	What is the purpose of ```|``` (pipe)?
+answer: the output of one function can be redirected to another, independent function.
+
+22.	Interpret the following command:
+
+	```cat huge_file.fasta | uniq | head -n 5 >proteins.fasta```
+answer: concatinate huge_file.fasta, find the uniq lines, and return the first 5 lines which begin with >proteins.fasta
+
+23.	What is a loop and when would you use it?
+answer: a loop is a recursive function which performs some operation on a set of objects, and then stops when it has ran out of objects. maybe not the best description, but the loop has so much functionality because it is so simple.
+
+24.	In a directory with the following files. What would the following loop do?
+         
+	 ```apple.txt, banana.txt, orange.txt 
+		$ for  filename in  *.txt; do
+		> cat  ${filename}  >>fruits.txt
+		> done
+		answer: for files ending in .txt (aka text files)
+		concatinate into a file called fruits.txt
+	
+25.	What is a shell script?
+answer: a script which runs on your operating system's designated shell (in bost cases the Bourne Again Shell). Often these scripts are meant to iterate through directries, parse through file contents, or call other programs.
+
+26.	What are the benefits of writing and running a script over typing the code in?
+answer: (1.) consistency (less likely to make mistakes). (2.) you can call it over and over again. (3.) you can string scripts together (ie. have one script that calls many others, conditionally). (4.) you can call it from any location.
+
+27.	When looking at a script what does ```#``` mean? Why would you use one?
+answer: # in most languages, the interpeter will ignore text in a line that comes after '#'
+	this makes '#' ideal for leaving behind notes within code or others to read
+	or retaining chunks of potentially useful code that you no longer need
+
+28.	What does ```grep``` stand for and what does it do?
+answer: grep: global search for regular expression and print out.
+	Regular expressions are just used to find strings. Grep finds these matches, and then reports back to the user.
+
+29.	What does ```find``` do?
+answer: find "finds" files and reports back their relative path.
+
+
+## Part II - Writing Code
+
+As part of this exercise please open the shell and practice moving around into different files.  Best practice is to try a little bit every day. Try to challenge yourself by not using the mouse. For each of the questions below type your code and the result from the shell prompt.
+
+-------------------------------------------------------------------------------------------
+1.	Open the shell and change directories to the desktop and list the contents, paste your code here.
+
+CC: my desktop? if you insist.
+
+>$ cd ~
+>$ pwd
+>$ cd Desktop/
+>$ ls -l
+
+OUTPUT:
+total 52
+drwxrwxr-x 10 christian christian 4096 Dec 19 15:20 ACADEMIC
+drwxrwxr-x  3 christian christian 4096 Jan 20 15:46 BIOINFORMATICS_SPRING
+drwxrwxr-x  2 christian christian 4096 Oct 22  2020 Calender
+drwxrwxr-x  9 christian christian 4096 Dec 22 17:04 COMP
+drwxrwxr-x  3 christian christian 4096 Dec 29 10:16 DLW_CJC_TACHINIDS
+drwxrwxr-x  3 christian christian 4096 Dec 22 20:01 FLY_RECORDER
+drwxrwxr-x  3 christian christian 4096 Dec 29 14:57 healthcare
+drwxrwxr-x  2 christian christian 4096 Dec  5  2020 Mileage_Plus_Info
+drwxrwxr-x 10 christian christian 4096 Jan 12 12:47 NAMED_PROJ_DIR
+drwxrwxr-x  5 christian christian 4096 Jan  6 06:33 PERSONAL
+drwxrwxr-x  5 christian christian 4096 Jan 18 12:53 READING
+drwxrwxr-x  4 christian christian 4096 Jan 10 08:50 SPODOPTERA_PLANTAGO_2022
+drwxrwxr-x  2 christian christian 4096 Dec 20 14:44 WRITING
+-------------------------------------------------------------------------------------------
+2.	Draw the file structure from the root directory into one of the folders on the desktop.  You can submit a pdf with a drawing. Select three locations and type the commands for changing directories to those locations use a combination of absolute and relative paths. 
+
+Diagram:
+							------Teaching/
+							|			------Diptera/
+							------Host_Records/----|
+							|			------Wasps/
+				----------Desktop/----------Reading/
+				|
+				----------Documents/
+				|
+	--------christian/---------------Downloads/
+	|
+/home/----------linuxbrew/
+
+# to Diptera:
+>$  cd ./christian/Desktop/Host_Records/Diptera
+>$  cd /home/christian/Desktop/Host_Records/Diptera
+
+# to Reading/ from Diptera/
+>$  cd ../Reading/
+
+# from Reading/ to Desktop/
+>$ cd ~/christian/Desktop
+>$ cd ../
+
+-------------------------------------------------------------------------------------------
+3.	On your computer create a directory on your desktop.  Create two files without opening them that have file extensions ```.txt```. Then use wildcards to list the files in that directory.  Paste you code here.
+>$ cd christian/Desktop/
+>$ mkdir 2files
+>$cd 2files/
+>$ >file1.txt
+>$ >file2.txt
+>$ echo *.txt
+-------------------------------------------------------------------------------------------
+4.	Download the file [Hutia_DNA.fasta](https://www.dropbox.com/s/07y610c8zt63nt5/Hutia_DNA.fasta?dl=0) from the Github repo. Make a new directory on the desktop. Move the file into that directory. List the contents of the directory.  How many lines are in this file? Fasta files are a type of data file that holds DNA sequences. They are all formatted the same. The first line starts with a > and a name followed by a line break, and then DNA sequence followed by a line break. The next line starts with an > and another name followed by a line break and the DNA sequence. With that in mind, how could you use linux commands to determine how many sequences are in this file? How many sequences are in this file?
+
+CC: given I've already navigated to my Bioinformatics homework directory
+>$ ls -l 
+OUTPUT:
+total 24
+-rw-rw-r-- 1 christian christian 2329 Jan 18 16:45 ChristiansNotebook.py
+-rw-rw-r-- 1 christian christian 1724 Jan 18 15:55 day1_notes.py
+-rw-rw-r-- 1 christian christian 6286 Jan 20 15:58 HMWRK_wk_1
+drwxrwxr-x 3 christian christian 4096 Jan 20 15:02 HomeworkDIR1
+-rw-rw-r-- 1 christian christian  166 Jan 20 15:40 Notes_Day_2.txt
+
+>$ ls
+OUTPUT:
+Hutia_DNA.fasta  shell-lesson-data  shell-lesson-data.zip
+
+>$ mkdir Hutia
+>$ mv Mutia_DNA.fasta Hutia/
+>$ cd Hutia/
+>$ ls -l
+OUTPUT:
+total 144952
+-rw-rw-r-- 1 christian christian 148423288 Jan 20 15:02 Hutia_DNA.fasta
+
+CC: looks like there are 144952 lines in Hutia_DNA.fasta
+CC: I can determine how many sequences there are by returning only lines which begin with '>'; I can count these lines with word count -less
+
+>$ grep ">" *.fasta | wc -l
+	# find '>' in files ending with .fasta, then count lines
+OUTPUT:
+1191002
+-------------------------------------------------------------------------------------------
+5.	Build a single line of code that would take the first 100 sequences of this file and put them in a new file called ‘MyOutputFile.fasta’. Use a combination of wc, sort and uniq in a single line of code to tell me how many unique lines are in this file.  Paste your commands and the answer here.
+
+I think the easiest way to write this file would probably be:
+>$ head -100 *.fasta >>MyOutputFile.fasta
+	# returns the first 100 lines of the Hurtia fasta (only fasta in dir)
+
+>$ sort MyFileOutput.fasta | uniq MyFileOutput.fasta | wc -l
+	# There are now 2 fastas so I'm going to refer to them by name
+	# here I have a tripart pipeline:
+	# 1 -> sort fasta 
+	# 2 -> return unique lines
+	# 3 -> count them, and return the number of lines that are unique
+OUTPUT:
+100
+-------------------------------------------------------------------------------------------
+
+6.	Write code that would create a loop to copy all the files in one directory ending in ```.txt``` to another directory. Paste the code here.  
+CC: contents of folder:
+Directory Contents:
+file1.txt  file2.txt  file3.txt  /mvhere  test.txt
+>----------*
+#!bin/bash
+for z in *.txt
+do
+cp ./mvhere				# of course you could replace this with any directory
+done
+>----------*
+-------------------------------------------------------------------------------------------
+
+7.	Write a bash script with in-line documentation (hint #) to show how to run a made up python program (script) called 'find_taxa.py' on set of files ending in ‘.fasta’. Show in the script how to run the program on each of those files. What is the name of your script? Type the script here. 
+
+> call_taxafinder.sh
+>----------*
+#!bin/bash
+for f in *.fasta	# for all files within the current directory ending in ".fasta"
+do # perform operation on next line
+python3 find_taxa.py $f	# I will call my python script, find_taxa.py, and pipe each fasta ($f) through it 
+done # operations performed
+>----------*
+
+Here is the fake .fasta and fake .py I put together to test it:
+**fake.fasta**
+>fake_ID_1
+agagagctgatcggcagagagacttctcttatagatag
+
+>fake_ID_2
+agagagagatctctcgtgtatagatagaaaaaaaccctata
+
+>fake_ID_3
+cttagagagagagactctctcgtgtatttgtccgtgtatttg
+
+>fake_ID_4
+agagagagactgactctctctctctcgtgtatagatag
+
+>fake_ID_5
+agagagagagagactctcgtgactctctcgtgtatagatag
+
+>fake_ID_6
+agagagactctcgtggagagacttctctcgtgtatagatag
+
+**end**
+
+**fake.py**
+
+#fake python
+import sys
+print(sys.argv[1])
+with open(sys.argv[1], 'r') as f:
+    content = f.readlines()
+for z in content:
+	print(z)
+	
+**end** -------------------------------------------------------------------------------------------
+
+8.	From the Hutia_DNA.fasta file tell me how on how many lines do we find the pattern ‘GAGA’. What was the code used to find this?
+CJC: number of occurences:
+CJC: Actually, I'm pretty sure grep -c counts the number of lines containing one or more
+matches. So this should work?
+
+>$ grep -c GAGA Hutia_DNA.fasta
+OUTPUT:
+304806
+-------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
