@@ -2,7 +2,7 @@
 
 #usage: run ./push_.sh pushed.file
 #to run from any directory, conveniently, put
-#it in the hom directory, and run ~/push_sh pushed.file
+#it in the home directory, and run ~/push_sh pushed.file
 #I imagine that works... maybe GIT will make it weird.
 
 echo $1 #my first argument from the
