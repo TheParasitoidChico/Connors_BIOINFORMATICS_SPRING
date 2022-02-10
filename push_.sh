@@ -8,7 +8,7 @@
 echo $1 #my first argument from the
 # command line will be the file I want so push
 echo "Enter commit comment"
-read i
+read i # ask user for commit comment, which is then printed on github
 git add $1  # git add my push file
 git commit -m "automated push, but also... ${i}." # I'm too lazy to figure out how to make a custom message
 # scratch that. 
