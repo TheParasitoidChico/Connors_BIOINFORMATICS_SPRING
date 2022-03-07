@@ -1,0 +1,346 @@
+---
+title: "Homework5-DataVis-ggplot"
+author: "Christian McMessy Connors"
+date: 'DUE: Thursday, March 10'
+output:
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#### Necessary items:
+- **libraries:** tidyverse, ggsci, ggforce, patchwork, Hmisc
+- **files:** bloom_df.csv, hw_task2_blank.png
+
+Within RStudio you can directly edit these blocks of code and turn in your homework that way with your code and figures printed.   
+I **HIGHLY** recommend getting your code to work in a normal R script then just copy and pasting the final code over to this document
+
+**First: import libraries, set your working directory, and read in bloom_df**  
+```{r init, message=FALSE, warning=FALSE}
+library(tidyverse) 
+library(ggforce) 
+library(ggsci)
+library(patchwork)
+library(Hmisc)
+
+setwd('~/Desktop/BIOINFORMATICS_SPRING/GGPLOT/') #change to match your ggplot directory
+
+bloom_df <- read.csv('bloom_df.csv')
+```
+
+### bloom_df contents
+- **taxa:** genus_species
+- **genus** 
+- **species** 
+- **logbodysize** 
+- **trophic_position**
+- **reg:** diadromous or non-diadromous
+
+Let's take a peak and look at the structure
+```{r bloom_df}
+bloom_df[1:5,]
+str(bloom_df)
+```
+
+### Graphical tasks
+
+This next tasks are going to ask you to make a series of figures. For each one, I would like you to make all of them *look good*. Change the theme around, change the axis labels, etc. Additionally, each of these will use the **reg** column which has 2 factors. Change the color and/or shape of them both. 
+
+### Task 1: Continuous vs. continuous plot
+
+Create two scatterplots of logbodysize vs. trophic_position grouped by reg
+
+##### First plot: 
+- a 2 trend lines (method = 'lm'), one for each reg variable
+
+```{r 1.1}
+#plot 1.1
+# scatterplots of logbodysize vs. trophic_position
+
+ggplot(data=bloom_df, aes(x=logbodysize, y=trophic_position))+
+  geom_point(aes(fill=reg), size=3,pch=21,colour='black')+
+  xlab('Log Body Size')+ylab('Trophic Position')+
+  stat_smooth(method = 'lm', linetype = 'dashed', colour = 'red', size = 1)+
+  theme_classic() + 
+  ggtitle('Trophic Position vs. Log Body Size')
+
+ggplot(data=bloom_df, aes(x=logbodysize, y=trophic_position, colour = reg))+
+  geom_point(aes(fill=reg), size=3,pch=22,colour='black')+
+  xlab('Log Body Size')+ylab('Trophic Position')+
+  stat_smooth(method = 'lm', linetype = 'dashed', size = 1)+
+  theme_classic() + 
+  ggtitle('Trophic Position vs. Log Body Size')
+
+ggplot(data=bloom_df, aes(x=logbodysize, y=trophic_position, colour = reg))+
+  stat_smooth(method = 'lm', linetype = 'dashed', size = 1)+
+  geom_point(aes(fill=reg), size=3,pch=22,colour='black')+
+  xlab('Log Body Size')+ylab('Trophic Position')+
+  #stat_smooth(method = 'lm', linetype = 'dashed', size = 1)+
+  theme_classic() + 
+  ggtitle('Trophic Position vs. Log Body Size')
+# I think this one looks fairly nice.
+
+ggplot(data=bloom_df, aes(x=logbodysize, y=trophic_position, colour = reg))+
+  stat_smooth(method = 'lm', linetype = 'dashed', size = 1)+
+  geom_point(aes(fill=reg), size=3,pch=22,colour='black')+
+  xlab('Log Body Size')+ylab('Trophic Position')+
+  #stat_smooth(method = 'lm', linetype = 'dashed', size = 1)+
+  theme_classic() + 
+  ggtitle('Trophic Position vs. Log Body Size')+
+  facet_wrap(~reg,nrow=1,scales = 'free')
+
+ggplot(data=bloom_df, aes(x=logbodysize, y=trophic_position, colour = reg))+
+  stat_smooth(method = 'lm', linetype = 'dashed', size = 1)+
+  geom_point(aes(fill=reg), size=3,pch=22,colour='black')+
+  xlab('Log Body Size')+ylab('Trophic Position')+
+  #stat_smooth(method = 'lm', linetype = 'dashed', size = 1)+
+  theme_classic() + 
+  ggtitle('Trophic Position vs. Log Body Size')+
+  facet_wrap(~reg,nrow=1,scales = 'free')
+
+```
+
+##### Second plot 
+- a single trend line for the whole model
+
+```{r 1.2}
+#plot 1.2
+ggplot(data=bloom_df, aes(x=logbodysize, y=trophic_position))+
+  geom_point(aes(fill=reg), size=4,pch=21,colour='black')+
+  xlab('Log Body Size')+ylab('Trophic Position')+
+  stat_smooth(method = 'lm', linetype = 'dashed', colour = 'red', size = 0.5)+
+  theme_classic() + 
+  ggtitle('Trophic Position vs. Log Body Size')
+# this was pulled from above; it looks fairly nice
+
+```
+
+### Task 2: Continuous vs. categorical
+
+##### The layout will be: 
+- 2 panels: trophic_position and logbodysize  
+- x axis: reg  
+- y axis: value of trophic_position and logbodysize  
+
+##### Create 4 plots:  
+- bar and error bars (mean and 95% conf. int.)  
+- point and error bars (mean and 95% conf. int.)  
+- box plots  
+- raw data + point and error bars (mean and 95% conf. int.)  
+
+All these plots should have the same general layout but change the type of plot to visualize the data. 
+
+**HINT:** logbodysize and trophic_position need to be turned into long format  
+
+##### Example layout:   
+![sample layout for task2](hw_task2_blank.png){width=50%}
+
+```{r 2.1}
+#plot 2.1
+# I don't feel like converting to long format
+long_bloom <- bloom_df %>%
+  pivot_longer(cols = c(logbodysize, trophic_position), names_to = "attr", values_to = "value")
+# ----- #
+ggplot(data=long_bloom,aes(x=reg,y=value,fill=attr)) +
+  facet_wrap(~attr,nrow=1,scales = 'free') +
+  geom_boxplot()+
+  theme_classic()
+# ----- #
+ggplot(data=long_bloom,aes(x=reg,y=value,fill=attr)) +
+  facet_wrap(~attr,nrow=1,scales = 'free') +
+  geom_boxplot()+
+  geom_sina(pch=21)+
+  theme_classic()
+# more or less what I'm looking for
+```
+
+```{r 2.2}
+#plot 2.2
+# next up: 4 facet wrapped plots with the following:
+# 1. bar & error bars
+# 2. point & error bars
+# 3. box plots
+# 4. raw data
+#------------------------------------------------------------------ just playin' ---#
+boxes<-ggplot(data=long_bloom,aes(x=reg,y=value, fill=attr)) +
+  geom_boxplot()+
+  stat_summary(fun.data = mean_cl_boot, geom = "errorbar",color='black')+
+  stat_summary(fun = mean, geom = "point", pch=4, size=8, color ='white')+
+  facet_wrap(~attr,nrow=1,scales = 'free')+
+  geom_sina(pch=21)+
+  theme_classic()
+
+scatters<-ggplot(data=bloom_df, aes(x=logbodysize, y=trophic_position, colour = reg))+
+  stat_smooth(method = 'lm', linetype = 'dashed', size = 1)+
+  geom_point(aes(fill=reg), size=3,pch=22,colour='black')+
+  xlab('Log Body Size')+ylab('Trophic Position')+
+  theme_classic()+
+  facet_wrap(~reg,nrow=2,scales = 'free')
+
+scatters
+boxes
+boxes + scatters + plot_layout(ncol=2,nrow=2)
+
+
+#--------------------------------------------------------------------------------------#
+##
+##
+metric_bloom <- bloom_df %>%
+  group_by(reg) %>%
+  summarise(logbody_mean = mean(logbodysize, na.rm = TRUE), # mean
+            logbody_sd = sd(logbodysize, na.rm = TRUE), # standard deviation
+            logbody_n = n(), # count
+            tpostion_mean = mean(trophic_position, na.rm = TRUE), # mean
+            tpostion_sd = sd(trophic_position, na.rm = TRUE),  # standard deviation
+            tpostion_n = n()) %>% # count 
+  mutate(logbody_se = logbody_sd / sqrt(logbody_n), #logbody standard error
+         logbody_lower.ci = logbody_mean - qt(1 - (0.05 / 2), logbody_n - 1) * logbody_se, #logbody lower 95% confidence interval
+         logbody_upper.ci = logbody_mean + qt(1 - (0.05 / 2), logbody_n - 1) * logbody_se, #logbody upper 95% confidence interval
+         tpostion_se = tpostion_sd / sqrt(tpostion_n), #tpostion standard error
+         tpostion_lower.ci = tpostion_mean - qt(1 - (0.05 / 2), tpostion_n - 1) * tpostion_se, #tpostion lower 95% confidence interval
+         tpostion_upper.ci = tpostion_mean + qt(1 - (0.05 / 2), tpostion_n - 1) * tpostion_se) #tpostion upper 95% confidence interval
+
+############
+metric_bloom
+############ # ok great. I dunno why I needed to make the long format ver.
+
+lbsum <- bloom_df %>%
+  group_by(reg) %>%
+  summarise(mean = mean(logbodysize, na.rm = TRUE),
+            sd = sd(logbodysize, na.rm = TRUE),
+            n = n()) %>%
+  mutate(se = sd / sqrt(n),
+         ci = 1.96 * se)
+trlvl <- bloom_df %>%
+  group_by(reg) %>%
+  summarise(mean = mean(trophic_position, na.rm = TRUE),
+            sd = sd(trophic_position, na.rm = TRUE),
+            n = n()) %>%
+  mutate(se = sd / sqrt(n),
+         ci = 1.96*se)
+lbsum$attr <- 'logbodysize'
+trlvl$attr <- 'trophic_position'
+bloom_sum <- rbind(lbsum,trlvl)
+
+#------------------------------------------------------------------------------------------------------------------------------------#
+# 1. barplot with error bars
+ggplot(data=bloom_sum,aes(x=reg,y=mean,fill=attr)) +
+  facet_wrap(~attr,nrow=1,scales = 'free') + 
+  geom_bar(stat='identity') +
+  geom_errorbar(aes(ymin = mean - ci, ymax = mean + ci))+
+  theme_classic()
+# 2. point with error bars
+ggplot(data=long_bloom,aes(x=reg,y=value,colour=reg)) +
+  facet_wrap(~attr,nrow=1,scales = 'free') +
+  stat_summary(fun.data = mean_cl_boot, geom = "errorbar",color='black') + 
+  stat_summary(fun = mean, geom = "point",size=5) 
+# 3. Boxplots with means
+ggplot(data=long_bloom,aes(x=reg,y=value, fill=attr)) +
+  geom_boxplot()+
+  stat_summary(fun.data = mean_cl_boot, geom = "errorbar",color='black')+
+  stat_summary(fun = mean, geom = "point", pch=4, size=8, color ='white')+
+  facet_wrap(~attr,nrow=1,scales = 'free')+
+  geom_sina(pch=21, size=2)+
+  xlab('diadromy')+
+  theme_classic()
+# raw data
+ggplot(data=long_bloom,aes(x=reg,y=value, fill=reg)) +
+  facet_wrap(~attr,nrow=1,scales = 'free')+
+  geom_sina(pch=21, size = 4)+
+  xlab('Diadromy')+ylab('')+
+  theme_classic()
+#----------------------------------------------------------#
+#----------------------------------------------------------#
+# 1. barplot with error bars
+bar<-ggplot(data=bloom_sum,aes(x=reg,y=mean,fill=attr)) +
+  facet_wrap(~attr,nrow=1,scales = 'free') + 
+  geom_bar(stat='identity') +
+  geom_errorbar(aes(ymin = mean - ci, ymax = mean + ci))+
+  theme_classic()
+# 2. point with error bars
+point<-ggplot(data=long_bloom,aes(x=reg,y=value,colour=reg)) +
+  facet_wrap(~attr,nrow=1,scales = 'free') +
+  stat_summary(fun.data = mean_cl_boot, geom = "errorbar",color='black') + 
+  stat_summary(fun = mean, geom = "point",size=5) 
+# 3. Boxplots with means
+boxes<-ggplot(data=long_bloom,aes(x=reg,y=value, fill=attr)) +
+  geom_boxplot()+
+  stat_summary(fun.data = mean_cl_boot, geom = "errorbar",color='black')+
+  stat_summary(fun = mean, geom = "point", pch=4, size=8, color ='white')+
+  facet_wrap(~attr,nrow=1,scales = 'free')+
+  geom_sina(pch=21, size=2)+
+  xlab('diadromy')+
+  theme_classic()
+# raw data
+scatter<-ggplot(data=long_bloom,aes(x=reg,y=value, fill=reg)) +
+  facet_wrap(~attr,nrow=1,scales = 'free')+
+  geom_sina(pch=21, size = 4)+
+  xlab('Diadromy')+ylab('')+
+  theme_classic()
+
+bar+point+boxes+scatter + plot_layout(ncol=2,nrow=2)
+#how ugly but I wanted to see
+
+```
+
+
+
+
+
+
+
+```{r 2.3}
+#plot 2.3
+```
+
+```{r 2.4}
+#plot 2.4
+# oh crap; my apologies. I did them all in one big block.
+```
+
+### Task 3: layering your plots
+
+Make any two figures with the bloom_df! Can be something we've done or something completely different. Make one TERRIBLE figure and one GREAT figure.
+
+Put them together using *patchwork* or *ggarrange* 
+
+
+```{r 3}
+#plot 3
+# Horrible:
+bar+point+boxes+scatter + plot_layout(ncol=2,nrow=2)
+
+simplebox<-ggplot(data=long_bloom,aes(x=reg,y=value,fill=attr)) +
+  facet_wrap(~attr,nrow=1,scales = 'free') +
+  geom_boxplot()+
+  geom_sina(pch=21)+
+  theme_classic()+
+  theme(legend.position = 'None')+
+  xlab('Diadromy Type') + ylab('')
+simplebox
+
+simplescatter <- ggplot(data=bloom_df, aes(x=logbodysize, y=trophic_position, colour = reg))+
+  stat_smooth(method = 'lm', linetype = 'dashed', size = 1)+
+  geom_point(aes(fill=reg), size=3,pch=22,colour='black')+
+  #xlab('Log Body Size')+ylab('Trophic Position')+
+  #stat_smooth(method = 'lm', linetype = 'dashed', size = 1)+
+  theme_classic() + 
+  #ggtitle('Trophic Position vs. Log Body Size')+
+  facet_wrap(~reg,nrow=1,scales = 'free')+
+  theme(legend.position = 'None')
+simplescatter
+
+
+simplebox+simplescatter + plot_layout(ncol=1,nrow=2)
+# okay, in my head, it looked a little better.
+```
+
+### Bonus: make a map (not required)  
+
+In the github for this course, there is an Rmarkdown called *ggmap_ex*. You can use this as a reference to make a map using any data you want. Try using your own data so it is useful.  
+
+```{r bonus}
+#bonus map
+```
